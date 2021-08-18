@@ -25,8 +25,10 @@ function App() {
     const response = await axios.get('https://swapi.dev/api/films/');
     console.log(response.data.results);
     //perdaryti duomenis i mum reikalinga struktura
-
-    setMovies(response.data.results);
+    const moviesTranformed = response.data.results.map((m) => {
+      return { id: m.episode_id, title: m.title, openingText: m.opening_crawl, releaseDate: m.realease_date };
+    });
+    setMovies(moviesTranformed);
   }
 
   return (
