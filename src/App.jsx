@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MoviesList from './components/MoviesList';
 import './App.css';
 import axios from 'axios';
@@ -12,7 +12,7 @@ function App() {
     setIsLoading(true);
     setMovieError(false);
     try {
-      const response = await axios.get('https://swapi.dev/api/film/');
+      const response = await axios.get('https://swapi.dev/api/films/');
 
       //perdaryti duomenis i mum reikalinga struktura
       const moviesTranformed = response.data.results.map((m) => {
@@ -26,6 +26,17 @@ function App() {
     setIsLoading(false);
   }
 
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, []);
+
+  const showContent = () => {
+    if (!isLoading && movies.length > 0) return <MoviesList movies={movies} />;
+    if (movieError) return <p>{movieError}</p>;
+    if (!isLoading && movies.length === 0 && !movieError) return <p>No movies at the moment</p>;
+    if (isLoading) return <p>Loading movies...</p>;
+  };
+
   return (
     <React.Fragment>
       <section>
@@ -33,11 +44,7 @@ function App() {
           {isLoading ? 'Loading' : 'Fetch Movies'}
         </button>
       </section>
-      <section>
-        {!isLoading && movies.length > 0 && <MoviesList movies={movies} />}
-        {!isLoading && movies.length === 0 && <p>No movies at the moment</p>}
-        {isLoading && <p>Loading movies...</p>}
-      </section>
+      <section>{showContent()}</section>
     </React.Fragment>
   );
 }
