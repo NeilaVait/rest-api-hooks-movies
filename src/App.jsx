@@ -30,12 +30,18 @@ function App() {
     fetchMoviesHandler();
   }, []);
 
-  const showContent = () => {
-    if (!isLoading && movies.length > 0) return <MoviesList movies={movies} />;
-    if (movieError) return <p>{movieError}</p>;
-    if (!isLoading && movies.length === 0 && !movieError) return <p>No movies at the moment</p>;
-    if (isLoading) return <p>Loading movies...</p>;
-  };
+  let content = <p>No movies at the moment</p>;
+  if (!isLoading && movies.length > 0) content = <MoviesList movies={movies} />;
+  if (!isLoading && movies.length === 0 && !movieError) content = <p>No movies at the moment</p>;
+  if (movieError) content = <p>{movieError}</p>;
+  if (isLoading) content = <p>Loading movies...</p>;
+
+  // const showContent = () => {
+  //   if (!isLoading && movies.length > 0) return <MoviesList movies={movies} />;
+  //   if (movieError) return <p>{movieError}</p>;
+  //   if (!isLoading && movies.length === 0 && !movieError) return <p>No movies at the moment</p>;
+  //   if (isLoading) return <p>Loading movies...</p>;
+  // };
 
   return (
     <React.Fragment>
@@ -44,7 +50,7 @@ function App() {
           {isLoading ? 'Loading' : 'Fetch Movies'}
         </button>
       </section>
-      <section>{showContent()}</section>
+      <section>{content}</section>
     </React.Fragment>
   );
 }
