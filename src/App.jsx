@@ -6,16 +6,23 @@ import axios from 'axios';
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [movieError, setMovieError] = useState(null);
 
   async function fetchMoviesHandler() {
     setIsLoading(true);
-    const response = await axios.get('https://swapi.dev/api/films/');
-    console.log(response.data.results);
-    //perdaryti duomenis i mum reikalinga struktura
-    const moviesTranformed = response.data.results.map((m) => {
-      return { id: m.episode_id, title: m.title, openingText: m.opening_crawl, releaseDate: m.realease_date };
-    });
-    setMovies(moviesTranformed);
+    setMovieError(false);
+    try {
+      const response = await axios.get('https://swapi.dev/api/film/');
+
+      //perdaryti duomenis i mum reikalinga struktura
+      const moviesTranformed = response.data.results.map((m) => {
+        return { id: m.episode_id, title: m.title, openingText: m.opening_crawl, releaseDate: m.realease_date };
+      });
+
+      setMovies(moviesTranformed);
+    } catch (err) {
+      setMovieError(err.message);
+    }
     setIsLoading(false);
   }
 
