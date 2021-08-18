@@ -1,7 +1,7 @@
-import React from 'react';
-
+import React, { useState } from 'react';
 import MoviesList from './components/MoviesList';
 import './App.css';
+import axios from 'axios';
 
 function App() {
   const dummyMovies = [
@@ -19,13 +19,23 @@ function App() {
     },
   ];
 
+  const [movies, setMovies] = useState([]);
+
+  async function fetchMoviesHandler() {
+    const response = await axios.get('https://swapi.dev/api/films/');
+    console.log(response.data.results);
+    //perdaryti duomenis i mum reikalinga struktura
+
+    setMovies(response.data.results);
+  }
+
   return (
     <React.Fragment>
       <section>
-        <button>Fetch Movies</button>
+        <button onClick={fetchMoviesHandler}>Fetch Movies</button>
       </section>
       <section>
-        <MoviesList movies={dummyMovies} />
+        <MoviesList movies={movies} />
       </section>
     </React.Fragment>
   );
